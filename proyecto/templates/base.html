@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Aplicación básica</title>
+    {% comment %} <link rel="stylesheet" href="{% static 'css/estilos.css' %}"> {% endcomment %}
+</head>
+<body>
+    <header>
+        <h1>Aplicación básica</h1>
+        {% comment %} {% if correo %}
+            <p>Usuario: {{ correo }}</p>
+            <p>Tipo: {{ request.session.tipo }}</p>
+            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit">Cerrar sesión</button>
+            </form>
+        {% else %}
+            <p>No has iniciado sesión</p>
+        {% endif %}
+        <nav>
+            {% if correo %}
+                <a href="{% url 'categorias' %}">Categorías</a>
+                <a href="{% url 'productos' %}">Todos los productos</a>
+                {% if not correo %}
+                    <a href="{% url 'login' %}">Login</a>
+                {% elif not correo or request.session.tipo == 'usuarios' %}
+                    <a href="{% url 'carrito' %}">
+                        <img src="{% static 'img/carrito.png' %}" class="icono_carrito">
+                        Carrito
+                    </a>
+                {% elif request.session.tipo == 'admin' %}
+                    <a href="{% url 'administracion' %}">Agregar usuario</a>
+                {% elif request.session.tipo == 'stock' %}
+                    <a href="{% url 'confirmar' %}">Confirmar pedidos</a>
+                {% endif %}
+            {% endif %}
+        </nav> {% endcomment %}
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    {% comment %} <script>
+    function toggleDetalles(id) {
+    let detalles = document.getElementById("detalles-" + id);
+    if (detalles.style.display === "none") {
+        detalles.style.display = "block";
+    } else {
+        detalles.style.display = "none";
+        }
+    }
+    </script> {% endcomment %}
+</body>
+</html>
